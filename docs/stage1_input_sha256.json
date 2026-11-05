@@ -1,0 +1,10 @@
+{
+  "data/eval_questions.jsonl": "d250630e177583dbf8167a8678a2f0b11af7d68e69acb1d9a9e616415305acd2",
+  "results/baseline/baseline_answers.csv": "34a277f066f4187b7ffed4bd34fc03d5bbb8cd92e9757eb1c7712f922505871b",
+  "results/baseline/baseline_answers.jsonl": "f25544d2f352bf4161672131f4f596afb2e044df12e7cd7efd12fd142bef3bb3",
+  "results/baseline/baseline_format_rate.png": "ad8e9cf617a68a241ddf682074e37cd849c9497d47699751a64054f269002901",
+  "results/baseline/baseline_metrics.csv": "352683c8e49d55a4b7737ceffb00ed920f8e06394cc2165498cf485188340406",
+  "results/baseline/config.json": "8e14fdf124127ba371b2ac5f646f870ab87c670f43df307fa7d5717c86ea7de9",
+  "results/baseline/judge_prompt_template.txt": "c899e4a8e044c7af8b9b249c809434dec490100ecb4c40b1fa8bf264c8fc2346",
+  "results/baseline/pip_freeze.txt": "5f393b5501d66b7cf604594162f06e74bf41c7474be1e84d86000104af0772c0"
+}

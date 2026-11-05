@@ -1,0 +1,8 @@
+# Direct dependencies from the saved baseline. Installation on T4 is not yet verified.
+# Keep Colab's CUDA-compatible torch; the actual version is recorded in each run.
+transformers==4.57.6
+accelerate==1.15.0
+bitsandbytes==0.50.2
+huggingface-hub==0.36.2
+safetensors==0.8.0
+matplotlib==3.10.0

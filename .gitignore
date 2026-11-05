@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.ipynb_checkpoints/
+.pytest_cache/
+.ruff_cache/
+
+# Secrets
+.env
+.env.*
+!.env.example
+*.token
+
+# Temporary experiment outputs, caches and large local weights
+outputs/
+checkpoints/
+models/
+wandb/
+.cache/
+*.safetensors
+*.pt
+*.bin
+
+# Colab / OS
+.DS_Store

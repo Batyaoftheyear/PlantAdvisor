@@ -4,6 +4,8 @@
 
 [Открыть ноутбук в Google Colab](https://colab.research.google.com/github/Batyaoftheyear/PlantAdvisor/blob/main/notebooks/baseline_colab.ipynb)
 
+[Оценка LLM-as-judge в Colab](https://colab.research.google.com/github/Batyaoftheyear/PlantAdvisor/blob/main/notebooks/judge_colab.ipynb)
+
 ## Статус на 05.11.2026
 
 Сохранён один реальный baseline, полученный на Colab T4: `Qwen/Qwen2.5-3B-Instruct`, NF4 4-bit, greedy decoding, 512 новых токенов. `run_id=58f7174a5f13e79c`. Замороженный тест: 30 вопросов, по 15 каждого типа.
@@ -14,7 +16,7 @@
 | diagnosis | 11/15 | 73,33% |
 | Всего | 26/30 | 86,67% |
 
-FPR измеряет структуру ответа. Корректность, полезность и безопасность советов этой цифрой не подтверждены. LLM-as-judge, SFT, результаты после обучения и LoRA-веса пока отсутствуют. `judge_prompt_template.txt` — черновой шаблон, без оценок.
+FPR измеряет структуру ответа. Корректность, полезность и безопасность советов этой цифрой не подтверждены. Код LLM-as-judge добавлен; реальные оценки на T4 ещё не получены. SFT, результаты после обучения и LoRA-веса пока отсутствуют. `results/baseline/judge_prompt_template.txt` остаётся историческим черновиком; рабочая рубрика — в `configs/judge.json`.
 
 Первый инженерный этап выполнен: проверены исходные артефакты, логика baseline вынесена в модули, добавлены CPU-тесты и Colab-ноутбук. **Новый GPU-код и установка зависимостей на T4 пока не проверены.** Аудит и ограничения: [docs/stage1_audit.md](docs/stage1_audit.md). Журнал CPU-проверок: [docs/stage1_validation.txt](docs/stage1_validation.txt).
 
@@ -26,10 +28,13 @@ src/plant_advisor/
   artifacts.py       # JSONL/CSV, конфигурация, хеши, валидация, экспорт
   inference.py       # загрузка модели, инференс, продолжение прогона на CUDA
   cli.py             # audit / run / export
+  judge.py           # рубрика, JSON-проверка, таблицы и метрики судьи
+  judge_inference.py # Qwen2.5-7B-Instruct на CUDA
   __init__.py
   __main__.py
 notebooks/
   baseline_colab.ipynb     # рабочий запуск в Colab T4
+  judge_colab.ipynb        # три пробные оценки и полный LLM-as-judge
   reference/
     01_baseline_colab.ipynb # исходный эксперимент
 data/eval_questions.jsonl  # замороженный тест, не использовать в SFT
@@ -38,6 +43,8 @@ tests/                    # unittest, без GPU и внешних зависи�
 docs/                     # аудит, контрольные суммы и CPU-проверки
 outputs/                  # новые прогоны, игнорируется Git
 requirements-gpu.txt      # прямые зависимости нового GPU-пути
+requirements-judge.txt    # окружение судьи и таблицы Colab
+configs/                  # замороженная рубрика и настройки судьи
 pyproject.toml            # пакет и CLI
 ```
 
@@ -134,6 +141,8 @@ python -m plant_advisor export --run-dir outputs/runs/<run_id>
 
 ## Что ещё требуется для сдачи
 
-После проверки нового entrypoint на T4: согласовать рубрику и выполнить реальную LLM-оценку baseline, выбрать и проверить источники SFT, подготовить train/validation без пересечения с замороженным test, провести QLoRA, повторить оценку, подготовить отчёт на 5–10 страниц. Датасет `bmeyer2025/plantclinic-care-corpus` пока лишь кандидат, его доступность и лицензия не проверены.
+Оценивание содержательного качества реализовано для Qwen2.5-7B-Instruct в NF4. Откройте `notebooks/judge_colab.ipynb` на T4: сначала выполняются оценки q01/q02/q26, после проверки объяснений включается `RUN_FULL_JUDGE=True`. Код читает сохранённые ответы 3B-модели; baseline повторно не генерируется. Все настройки и результаты сохраняются в `outputs/judge/<run_id>/`. Таблица оценок и реальные метрики появятся после GPU-запуска. Подробности и команды — [docs/llm_judge.md](docs/llm_judge.md).
+
+После пробного запуска судьи на T4: проверить объяснения и выполнить реальную LLM-оценку baseline. Следующие этапы — отдельно выбрать и проверить источники SFT, подготовить train/validation без пересечения с замороженным test, провести QLoRA, повторить оценку, подготовить отчёт на 5–10 страниц. Датасет `bmeyer2025/plantclinic-care-corpus` пока лишь кандидат, его доступность и лицензия не проверены.
 
 В итоговой сдаче нужны: код и инструкции Colab, данные JSONL/Parquet для `datasets.load_dataset`, реальные метрики/графики/логи, доступная ссылка на LoRA в safetensors или совместимом формате, отчёт и ссылка на репозиторий. Не коммитить токены, кэши и большие веса.

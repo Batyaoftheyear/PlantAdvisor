@@ -6,7 +6,7 @@ import sys
 from pathlib import Path
 
 from .artifacts import (
-    assert_writable_output, audit_baseline, export_run, load_questions, plot_summary,
+    assert_writable_output, audit_baseline, export_run, load_questions, plot_summary, write_json,
 )
 
 
@@ -26,10 +26,33 @@ def main(argv=None):
     export.add_argument("--run-dir", type=Path, required=True)
     export.add_argument("--questions", type=Path, default=Path("data/eval_questions.jsonl"))
     export.add_argument("--plot", action="store_true")
+    judge = commands.add_parser("judge", help="CUDA: LLM-as-judge, сначала три sanity-примера")
+    judge.add_argument("--config", type=Path, default=Path("configs/judge.json"))
+    judge.add_argument("--source-dir", type=Path, default=Path("results/baseline"))
+    judge.add_argument("--questions", type=Path, default=Path("data/eval_questions.jsonl"))
+    judge.add_argument("--output-root", type=Path, default=Path("outputs"))
+    judge.add_argument("--reference-run", type=Path,
+                       help="Сохранённый запуск: те же рубрика, модель, генерация и окружение")
+    judge.add_argument("--full", action="store_true", help="Оценить 30 ответов после sanity check")
+    judge.add_argument("--result-file", type=Path, help="Сохранить сводку и путь к запуску для Colab")
+    judge_export = commands.add_parser("judge-export", help="CPU: таблица и метрики судьи")
+    judge_export.add_argument("--run-dir", type=Path, required=True)
+    judge_export.add_argument("--mode", choices=("sanity", "full"), default="full")
     args = parser.parse_args(argv)
     try:
         if args.command == "audit":
             result = audit_baseline(args.questions, args.run_dir)
+        elif args.command == "judge":
+            from .judge_inference import run_judge
+            result_file = assert_writable_output(args.result_file) if args.result_file else None
+            result = run_judge(args.config, args.source_dir, args.questions, args.output_root,
+                               full=args.full, reference_run=args.reference_run)
+            if result_file:
+                result_file.parent.mkdir(parents=True, exist_ok=True)
+                write_json(result_file, result)
+        elif args.command == "judge-export":
+            from .judge import export_judgments
+            result = export_judgments(args.run_dir, args.mode)
         elif args.command == "export":
             target = assert_writable_output(args.run_dir)
             result = export_run(target, load_questions(args.questions))

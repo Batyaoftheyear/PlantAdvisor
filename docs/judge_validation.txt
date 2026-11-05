@@ -1,0 +1,144 @@
+PlantAdvisor LLM judge CPU validation; 2026-11-05 Europe/Moscow
+Python 3.14.4 on Windows
+Frozen questions and baseline artifacts: 8/8 SHA256 unchanged.
+Model revision metadata checked against the official Hugging Face repository.
+No model download, CUDA inference, real judge scores, SFT or dataset collection performed.
+Unit test score values are temporary fixtures, not results of any model.
+
+$ python -m unittest discover -s tests -v
+
+test_append_resumes_after_missing_final_newline (test_artifacts.ArtifactTests.test_append_resumes_after_missing_final_newline) ... ok
+test_changed_question_hash (test_artifacts.ArtifactTests.test_changed_question_hash) ... ok
+test_checkpoint_corruption (test_artifacts.ArtifactTests.test_checkpoint_corruption) ... ok
+test_cli_audit_help_and_output_guard (test_artifacts.ArtifactTests.test_cli_audit_help_and_output_guard) ... ok
+test_config_changes_cannot_reuse_old_answers (test_artifacts.ArtifactTests.test_config_changes_cannot_reuse_old_answers) ... ok
+test_config_fingerprints (test_artifacts.ArtifactTests.test_config_fingerprints) ... ok
+test_corrupt_csv_and_metrics_are_detected (test_artifacts.ArtifactTests.test_corrupt_csv_and_metrics_are_detected) ... ok
+test_cpu_imports_do_not_load_ml_packages (test_artifacts.ArtifactTests.test_cpu_imports_do_not_load_ml_packages) ... ok
+test_duplicate_answers (test_artifacts.ArtifactTests.test_duplicate_answers) ... ok
+test_export_rejects_partial_run (test_artifacts.ArtifactTests.test_export_rejects_partial_run) ... ok
+test_export_roundtrip (test_artifacts.ArtifactTests.test_export_roundtrip) ... ok
+test_frozen_inputs_have_original_bytes (test_artifacts.ArtifactTests.test_frozen_inputs_have_original_bytes) ... ok
+test_nonfinite_seconds (test_artifacts.ArtifactTests.test_nonfinite_seconds) ... ok
+test_partial_records_only_allowed_for_resume (test_artifacts.ArtifactTests.test_partial_records_only_allowed_for_resume) ... ok
+test_question_validation_and_jsonl_errors (test_artifacts.ArtifactTests.test_question_validation_and_jsonl_errors) ... ok
+test_real_baseline (test_artifacts.ArtifactTests.test_real_baseline) ... ok
+test_reference_and_data_output_protection (test_artifacts.ArtifactTests.test_reference_and_data_output_protection) ... ok
+test_reference_notebook_constants_match_artifacts (test_artifacts.ArtifactTests.test_reference_notebook_constants_match_artifacts) ... ok
+test_runner_notebook_syntax_and_default_switches (test_artifacts.ArtifactTests.test_runner_notebook_syntax_and_default_switches) ... ok
+test_unsupported_config_is_rejected (test_artifacts.ArtifactTests.test_unsupported_config_is_rejected) ... ok
+test_checkpoint_rejects_wrong_answer_duplicate_and_edited_scores (test_judge.JudgeTests.test_checkpoint_rejects_wrong_answer_duplicate_and_edited_scores) ... ok
+test_cpu_imports_cli_and_source_integrity (test_judge.JudgeTests.test_cpu_imports_cli_and_source_integrity) ... ok
+test_invalid_scores_types_ranges_and_missing_fields (test_judge.JudgeTests.test_invalid_scores_types_ranges_and_missing_fields) ... ok
+test_json_failure_is_not_replaced_with_scores (test_judge.JudgeTests.test_json_failure_is_not_replaced_with_scores) ... ok
+test_json_repair_preserves_raw_attempts (test_judge.JudgeTests.test_json_repair_preserves_raw_attempts) ... ok
+test_judge_notebook_encoding_syntax_and_full_run_disabled (test_judge.JudgeTests.test_judge_notebook_encoding_syntax_and_full_run_disabled) ... ok
+test_malformed_duplicate_and_ambiguous_json (test_judge.JudgeTests.test_malformed_duplicate_and_ambiguous_json) ... ok
+test_prompt_is_blind_and_contains_no_sanity_answer_hints (test_judge.JudgeTests.test_prompt_is_blind_and_contains_no_sanity_answer_hints) ... ok
+test_protocol_roundtrip_and_deterministic_order (test_judge.JudgeTests.test_protocol_roundtrip_and_deterministic_order) ... ok
+test_sanity_gate_and_cpu_export (test_judge.JudgeTests.test_sanity_gate_and_cpu_export) ... ok
+test_scores_and_null (test_judge.JudgeTests.test_scores_and_null) ... ok
+test_summary_uses_diagnosis_only_and_reports_coverage (test_judge.JudgeTests.test_summary_uses_diagnosis_only_and_reports_coverage) ... ok
+test_additional_sections_are_allowed (test_metrics.FormatCheckTests.test_additional_sections_are_allowed) ... ok
+test_duplicate_heading (test_metrics.FormatCheckTests.test_duplicate_heading) ... ok
+test_empty_answer_and_empty_sections (test_metrics.FormatCheckTests.test_empty_answer_and_empty_sections) ... ok
+test_existing_metric_weakness_is_preserved (test_metrics.FormatCheckTests.test_existing_metric_weakness_is_preserved) ... ok
+test_inline_headings_do_not_count (test_metrics.FormatCheckTests.test_inline_headings_do_not_count) ... ok
+test_missing_section_is_not_marked_as_order_error (test_metrics.FormatCheckTests.test_missing_section_is_not_marked_as_order_error) ... ok
+test_normalization (test_metrics.FormatCheckTests.test_normalization) ... ok
+test_reference_notebook_parity (test_metrics.FormatCheckTests.test_reference_notebook_parity) ... ok
+test_reordered_sections (test_metrics.FormatCheckTests.test_reordered_sections) ... ok
+test_summary_requires_answers (test_metrics.FormatCheckTests.test_summary_requires_answers) ... ok
+test_unknown_task (test_metrics.FormatCheckTests.test_unknown_task) ... ok
+test_valid_styles (test_metrics.FormatCheckTests.test_valid_styles) ... ok
+
+----------------------------------------------------------------------
+Ran 44 tests in 2.296s
+
+OK
+
+Exit code: 0
+
+$ python -m compileall -q src tests
+
+
+Exit code: 0
+
+$ python -m plant_advisor audit
+{
+  "run_id": "58f7174a5f13e79c",
+  "question_count": 30,
+  "answer_count": 30,
+  "task_counts": {
+    "care": 15,
+    "diagnosis": 15
+  },
+  "failed_ids": [
+    "q04",
+    "q16",
+    "q18",
+    "q26"
+  ],
+  "metrics": [
+    {
+      "task": "care",
+      "count": 15,
+      "pass_rate": 1,
+      "avg_section_hits": 2,
+      "avg_seconds": 20.926000000000002
+    },
+    {
+      "task": "diagnosis",
+      "count": 15,
+      "pass_rate": 0.7333333333333333,
+      "avg_section_hits": 2.6666666666666665,
+      "avg_seconds": 18.551333333333332
+    },
+    {
+      "task": "ALL",
+      "count": 30,
+      "pass_rate": 0.8666666666666667,
+      "avg_section_hits": 2.3333333333333335,
+      "avg_seconds": 19.738666666666667
+    }
+  ]
+}
+
+
+Exit code: 0
+
+$ python -m plant_advisor judge --help
+usage: python.exe -m plant_advisor judge [-h] [--config CONFIG]
+                                         [--source-dir SOURCE_DIR]
+                                         [--questions QUESTIONS]
+                                         [--output-root OUTPUT_ROOT]
+                                         [--reference-run REFERENCE_RUN]
+                                         [--full] [--result-file RESULT_FILE]
+
+options:
+  -h, --help            show this help message and exit
+  --config CONFIG
+  --source-dir SOURCE_DIR
+  --questions QUESTIONS
+  --output-root OUTPUT_ROOT
+  --reference-run REFERENCE_RUN
+                        Сохранённый запуск: те же рубрика, модель, генерация и
+                        окружение
+  --full                Оценить 30 ответов после sanity check
+  --result-file RESULT_FILE
+                        Сохранить сводку и путь к запуску для Colab
+
+
+Exit code: 0
+
+$ python -m plant_advisor judge-export --help
+usage: python.exe -m plant_advisor judge-export [-h] --run-dir RUN_DIR
+                                                [--mode {sanity,full}]
+
+options:
+  -h, --help            show this help message and exit
+  --run-dir RUN_DIR
+  --mode {sanity,full}
+
+
+Exit code: 0
